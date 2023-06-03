@@ -20,15 +20,16 @@ jobs:
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     aws-region: <your-aws-region>
 
-      - name: Install Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+      # - name: Install Docker
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y docker.io
 
       - name: Build and Push Docker image
         run: |
-          docker build -t my-web-app .
-          docker tag my-web-app:latest kcyuan/ai-animated-images:latest
+          cd torchserve
+          docker build -t ai-animated-images .
+          docker tag ai-animated-images:latest kcyuan/ai-animated-images:latest
           docker login --username kcyuan --password ${{ secrets.DOCKERHUB_TOKEN }}
           docker push kcyuan/ai-animated-images:latest
 
