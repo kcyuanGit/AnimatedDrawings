@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1.2
 
-FROM continuumio/miniconda3
+FROM --platform=linux/arm64 continuumio/miniconda3
 
 # install os dependencies
 RUN mkdir -p /usr/share/man/man1
