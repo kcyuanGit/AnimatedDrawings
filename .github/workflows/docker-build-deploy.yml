@@ -39,7 +39,9 @@ jobs:
             SSH_USER: "ec2-user"
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ls -al ~/.ssh
+          ls -al ~/
+          mkdir ~/.ssh/
+          touch ~/.ssh/config
           cat >>~/.ssh/config <<END
           Host ec2
             HostName $SSH_HOST
