@@ -12,38 +12,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: <your-aws-region>
-
-      # - name: Install Docker
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y docker.io
-
-      # - name: Build and Push Docker image
-      #   run: |
-      #     cd torchserve
-      #     docker build -t ai-animated-images .
-      #     docker tag ai-animated-images:latest kcyuan/ai-animated-images:latest
-      #     docker login --username kcyuan --password ${{ secrets.DOCKERHUB_TOKEN }}
-      #     docker push kcyuan/ai-animated-images:latest
-      - name: Setup AWS CLI
-        run: |
-          curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: <your-aws-region>
       - name: Configure AWS Credentials
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ${{ secrets.AWS_REGION }}
-
       - name: Deploy to EC2 instances
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
@@ -51,5 +30,5 @@ jobs:
             SSH_USER: "ubuntu"
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key.pem
-            ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker pull kcyuan/ai-animated-images:latest"
-            ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker pull kcyuan/ai-animated-images:latest"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
