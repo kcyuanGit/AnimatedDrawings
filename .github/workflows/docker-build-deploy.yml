@@ -44,18 +44,12 @@ jobs:
         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws configure set default.region ${{ secrets.AWS_REGION }}
 
-    - name: Retrieve Public IP of EC2 instance
-      id: ec2
+    - name: Deploy to EC2 instances
+      env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
+          SSH_HOST: "ec2-52-8-240-120.us-west-1.compute.amazonaws.com"
+          SSH_USER: "ubuntu"
       run: |
-        INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances --instance-ids ${{ secrets.INSTANCE_ID }} --query "Reservations[].Instances[].PublicIpAddress" --output text)
-        echo "::set-output name=instance_ip::$INSTANCE_PUBLIC_IP"
-
-      - name: Deploy to EC2 instances
-        env:
-            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
-            SSH_HOST: "ec2-52-8-240-120.us-west-1.compute.amazonaws.com"
-            SSH_USER: "ubuntu"
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key.pem
-           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker pull kcyuan/ai-animated-images:latest"
-           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker pull kcyuan/ai-animated-images:latest"
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
