@@ -18,6 +18,20 @@ jobs:
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ${{ secrets.AWS_REGION }}
       - name: Deploy to EC2 instances
+        uses: JimCronqvist/action-ssh@master
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
+          HOSTNAME: "ec2-52-8-240-120.us-west-1.compute.amazonaws.com"
+          USER_NAME: "ubuntu"
+        with:
+          hosts: '${USER_NAME}@${HOSTNAME}'
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
+          debug: false
+          command: |
+            ls -lah
+            hostname -a
+            whoami
+      - name: Deploy to EC2 instances
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
             SSH_HOST: "ec2-52-8-240-120.us-west-1.compute.amazonaws.com"
