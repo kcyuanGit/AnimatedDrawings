@@ -25,8 +25,8 @@ jobs:
           USER_NAME: "ubuntu"
         with:
           hosts: '${USER_NAME}@${HOSTNAME}'
-          privateKey: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
-          debug: false
+          privateKey: ${ PRIVATE_KEY }
+          debug: true
           command: |
             ls -lah
             hostname -a
