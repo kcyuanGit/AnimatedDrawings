@@ -32,12 +32,10 @@ jobs:
       #     docker tag ai-animated-images:latest kcyuan/ai-animated-images:latest
       #     docker login --username kcyuan --password ${{ secrets.DOCKERHUB_TOKEN }}
       #     docker push kcyuan/ai-animated-images:latest
-      - uses: webfactory/ssh-agent@v0.7.0
-        with:
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
-
       - name: Deploy to EC2 instances
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
         run: |
-          # Assuming you have SSH keys configured for EC2 instances
-          ssh ubuntu@ec2-52-8-240-120.us-west-1.compute.amazonaws.com  -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker pull kcyuan/ai-animated-images:latest"
-          ssh ubuntu@ec2-52-8-240-120.us-west-1.compute.amazonaws.com  -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -i private_key ubuntu@ec2-52-8-240-120.us-west-1.compute.amazonaws.com  -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker pull kcyuan/ai-animated-images:latest"
+          ssh -i private_key ubuntu@ec2-52-8-240-120.us-west-1.compute.amazonaws.com  -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
