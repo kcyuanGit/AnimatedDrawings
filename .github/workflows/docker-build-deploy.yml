@@ -50,5 +50,5 @@ jobs:
             StrictHostKeyChecking no
           END
           cat ~/.ssh/config
-          ssh -i private_key ${SSH_USER}@${SSH_HOST} -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker pull kcyuan/ai-animated-images:latest"
-          ssh -i private_key ${SSH_USER}@${SSH_HOST} -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
+          ssh -i private_key ${SSH_USER}@${SSH_HOST} -vv "docker pull kcyuan/ai-animated-images:latest"
+          ssh -i private_key ${SSH_USER}@${SSH_HOST} -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
