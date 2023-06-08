@@ -26,7 +26,7 @@ jobs:
       - name: Deploy to EC2 instances
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2_SG_1 }}
-            SSH_USER: "ubuntu"
+            SSH_USER: "ec2-user"
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${{ steps.ec2.outputs.instance_ip }} -vv '
