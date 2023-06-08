@@ -29,7 +29,6 @@ jobs:
             SSH_USER: "ec2-user"
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@ec2-54-255-198-104.ap-southeast-1.compute.amazonaws.com -vvv '
-          docker pull kcyuan/ai-animated-images:latest
-          docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${{ steps.ec2.outputs.instance_ip }} -vv '
+          ls -al
           '
