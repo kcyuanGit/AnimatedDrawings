@@ -31,6 +31,13 @@ jobs:
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${{ steps.ec2.outputs.instance_ip }} -vv '
           ls -al
+          sudo yum update
+          sudo yum search docker
+          sudo yum info docker
+          sudo yum install docker
+          sudo usermod -a -G docker ec2-user
+          id ec2-user
+          newgrp docker
           docker login --username kcyuan --password dckr_pat_7kcQijMNZ7k72zcH4KtMV5MdfPM
           docker pull kcyuan/ai-animated-images
           docker run -d -p 8080:8080 -p 8081:8081 --name ai-animated-images kcyuan/ai-animated-images:latest
