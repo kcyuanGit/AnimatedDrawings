@@ -25,7 +25,7 @@ jobs:
       - name: Retrieve Public IP of EC2 instance
         id: ec2
         run: |
-          INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances --instance-ids ${{ secrets.INSTANCE_ID }} --query "Reservations[].Instances[].PublicIpAddress" --output text)
+          INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances --instance-ids 'i-0c3a87c07b715a42f' --query "Reservations[].Instances[].PublicIpAddress" --output text)
           echo "::set-output name=instance_ip::$INSTANCE_PUBLIC_IP"
       - name: Deploy to EC2 instances
         env:
@@ -33,7 +33,6 @@ jobs:
             SSH_USER: "ubuntu"
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${{ steps.ec2.outputs.instance_ip }} -vv '
           docker pull kcyuan/ai-animated-images:latest
           docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest
