@@ -32,8 +32,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${{ steps.ec2.outputs.instance_ip }} -vv '
           ls -al
           sudo yum install -y docker
-          sudo service docker start
-          sudo usermod -a -G docker ec2-user
           docker login --username kcyuan --password dckr_pat_7kcQijMNZ7k72zcH4KtMV5MdfPM
           docker pull kcyuan/ai-animated-images
           docker run -d -p 8080:8080 -p 8081:8081 --name ai-animated-images kcyuan/ai-animated-images:latest
