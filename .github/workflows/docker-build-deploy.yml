@@ -22,7 +22,7 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
           HOSTNAME: "ec2-52-8-240-120.us-west-1.compute.amazonaws.com"
-          USER_NAME: "ubuntu"
+          USER_NAME: "ec2-user"
         with:
           hosts: '${USER_NAME}@${HOSTNAME}'
           privateKey: ${ PRIVATE_KEY }
