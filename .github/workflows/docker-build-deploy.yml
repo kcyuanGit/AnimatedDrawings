@@ -37,5 +37,5 @@ jobs:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -i private_key ubuntu@ec2-52-8-240-120.us-west-1.compute.amazonaws.com -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker pull kcyuan/ai-animated-images:latest"
-          ssh -i private_key ubuntu@ec2-52-8-240-120.us-west-1.compute.amazonaws.com -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
+          ssh -i private_key ec2-user@ec2-52-8-240-120.us-west-1.compute.amazonaws.com -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker pull kcyuan/ai-animated-images:latest"
+          ssh -i private_key ec2-user@ec2-52-8-240-120.us-west-1.compute.amazonaws.com -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
