@@ -23,6 +23,6 @@ jobs:
             SSH_HOST: "ec2-52-8-240-120.us-west-1.compute.amazonaws.com"
             SSH_USER: "ubuntu"
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key.pem
+          echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker pull kcyuan/ai-animated-images:latest"
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
