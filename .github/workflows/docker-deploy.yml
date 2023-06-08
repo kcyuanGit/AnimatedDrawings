@@ -1,0 +1,40 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: <your-aws-region>
+
+      # - name: Install Docker
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y docker.io
+
+      - name: Build and Push Docker image
+        run: |
+          cd torchserve
+          docker build -t ai-animated-images .
+          docker tag ai-animated-images:latest kcyuan/ai-animated-images:latest
+          docker login --username kcyuan --password ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push kcyuan/ai-animated-images:latest
+
+      # - name: Deploy to EC2 instances
+      #   run: |
+      #     # Assuming you have SSH keys configured for EC2 instances
+      #     ssh -i <path-to-ssh-private-key> ec2-user@<ec2-instance-ip> "docker pull kcyuan/ai-animated-images:latest"
+      #     ssh -i <path-to-ssh-private-key> ec2-user@<ec2-instance-ip> "docker run -d -p 8007:8007 --name ai-animated-images kcyuan/ai-animated-images:latest"
