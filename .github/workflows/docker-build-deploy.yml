@@ -35,4 +35,7 @@ jobs:
           docker login --username kcyuan --password dckr_pat_7kcQijMNZ7k72zcH4KtMV5MdfPM
           docker pull kcyuan/ai-animated-images
           docker run -d -p 8080:8080 -p 8081:8081 --name ai-animated-images kcyuan/ai-animated-images:latest
+          git clone https://github.com/facebookresearch/AnimatedDrawings.git
+          cd ../examples
+          python image_to_animation.py drawings/garlic.png garlic_out
           '
