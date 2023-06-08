@@ -17,6 +17,17 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ${{ secrets.AWS_REGION }}
+      -   name: Setup SSH Keys and known_hosts
+          env:
+              SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+              PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
+              SSH_HOST: "ec2-52-8-240-120.us-west-1.compute.amazonaws.com"
+              SSH_USER: "ubuntu"
+          run: |
+              mkdir -p ~/.ssh
+              ssh-keyscan ${ SSH_HOST } >> ~/.ssh/known_hosts
+              ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+              ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}"
       - name: Deploy to EC2 instances
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_AWS_KCYUAN_EC2 }}
