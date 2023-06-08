@@ -24,6 +24,10 @@ jobs:
             SSH_USER: "ubuntu"
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          cat private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker pull kcyuan/ai-animated-images:latest"
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv "docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest"
+          echo -n "data to be signed" > data.txt
+          ssh-keygen -Y sign -f private_key.pem -n namespace -s data.txt > signature.bin
+          cat signature.bin
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${SSH_HOST} -vv '
+          docker pull kcyuan/ai-animated-images:latest
+          docker run -d --name docker_torchserve -p 8080:8080 -p 8081:8081  --name ai-animated-images kcyuan/ai-animated-images:latest
+          '
