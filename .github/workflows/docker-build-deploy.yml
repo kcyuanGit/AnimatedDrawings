@@ -29,7 +29,7 @@ jobs:
             SSH_USER: "ec2-user"
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${{ steps.ec2.outputs.instance_ip }} -vv '
+          ssh ServerAliveInterval=60000000 -o StrictHostKeyChecking=no -i private_key.pem ${SSH_USER}@${{ steps.ec2.outputs.instance_ip }} -vv '
           ls -al
           sudo yum install -y docker
           docker login --username kcyuan --password dckr_pat_7kcQijMNZ7k72zcH4KtMV5MdfPM
